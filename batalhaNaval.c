@@ -10,6 +10,93 @@ int main() {
     // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
     // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
 
+
+    
+    // DECLARAÇÃO E INICIALIZAÇÃO DO TABULEIRO
+    
+    
+    // Matriz 10 x 10 simulando um tabuleiro
+    int tabuleiro[10][10];
+
+    // Variáveis para controlar os loops
+    int i, j;
+
+    // O primeiro 'for' passa por cada linha.
+    for (i = 0; i < 10; i++) {
+        // O segundo 'for' passa por cada coluna daquela linha.
+        for (j = 0; j < 10; j++) {
+            tabuleiro[i][j] = 0; // 0 representa água
+        }
+    }
+
+
+    // DEFINIÇÃO DOS NAVIOS (VETORES)
+    
+    // Número 3 para simular os návios
+
+    int navioHorizontal[3] = {3, 3, 3};
+    int navioVertical[3] = {3, 3, 3};
+
+
+    // POSICIONANDO O NAVIO HORIZONTAL
+    
+    
+    // Definicição do primeiro návio no tabuleiro
+    int linhaH = 2;
+    int colunaH = 4;
+
+    // Loop para colocar as partes do navio no tabuleiro
+    for (i = 0; i < 3; i++) {
+
+        // Verifica se a posição para não sair do tabuleiro
+        if (colunaH + i < 10) {
+            // Copia o valor do vetor (simulando o návio) para o tabuleiro
+            tabuleiro[linhaH][colunaH + i] = navioHorizontal[i];
+        }
+    }
+
+    // POSICIONANDO O NAVIO VERTICAL
+
+    // Definição do segundo návio no tabuleiro
+    int linhaV = 5;
+    int colunaV = 8;
+
+    // Loop para colocar o navio vertical.
+    for (i = 0; i < 3; i++) {
+    
+        // Loop para colocar as partes do navio no tabuleiro
+        if (linhaV + i < 10) {
+            // Checagem simples de sobreposição.
+            // Só colocamos se o local for 0, simulando a água, se já tiver navio, ele não coloca em cima
+            if (tabuleiro[linhaV + i][colunaV] == 0) {
+                 tabuleiro[linhaV + i][colunaV] = navioVertical[i];
+            }
+        }
+    }
+
+    // EXIBINDO O TABULEIRO
+
+    printf("\n   --- BATALHA NAVAL ---\n\n");
+
+    printf("    "); // Espaço inicial para alinhar
+    for(j = 0; j < 10; j++){
+        printf("%d ", j); // Imprime o número da coluna
+    }
+    printf("\n");
+
+
+    // Imprime o tabuleiro
+    for (i = 0; i < 10; i++) {
+        printf("%d | ", i);
+        
+        for (j = 0; j < 10; j++) {
+            // Imprime o valor da célula (0 ou 3) seguido de um espaço
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
     // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
     // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
