@@ -61,15 +61,51 @@ int main() {
     int linhaV = 5;
     int colunaV = 8;
 
-    // Loop para colocar o navio vertical.
+    // Loop para colocar o navio vertical
     for (i = 0; i < 3; i++) {
     
         // Loop para colocar as partes do navio no tabuleiro
         if (linhaV + i < 10) {
-            // Checagem simples de sobreposição.
+            // Checagem simples de sobreposição
             // Só colocamos se o local for 0, simulando a água, se já tiver navio, ele não coloca em cima
             if (tabuleiro[linhaV + i][colunaV] == 0) {
                  tabuleiro[linhaV + i][colunaV] = navioVertical[i];
+            }
+        }
+    }
+
+
+    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
+    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
+    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
+    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+
+    // POSICIONANDO O NAVIO DIAGONAL (\)
+    
+    // Começa no topo esquerdo (0,0) e desce para a direita (9,9)
+    // Ex: (0,0) -> (1,1) -> (2,2)
+    int linD1 = 0, colD1 = 0;
+    for (i = 0; i < 3; i++) {
+        // Valida se a linha e coluna estão dentro do limite
+        if (linD1 + i < 10 && colD1 + i < 10) {
+            tabuleiro[linD1 + i][colD1 + i] = 3;
+        }
+    }
+
+
+    // POSICIONANDO O NAVIO NA DIAGONAL SECUNDÁRIA (/)
+
+    // Começa na linha 7, coluna 9 e sobe para a esquerda (ou desce invertido).
+    // Ex: Linha 7, Coluna 9 -> (7,9) -> (8,8) -> (9,7)
+    int linD2 = 7, colD2 = 9;
+    for (i = 0; i < 3; i++) {
+        // Valida se a linha e coluna estão dentro do limite
+        if (linD2 + i < 10 && colD2 - i >= 0) {
+            
+            // Checagem simples de sobreposição
+            // Só coloca se for ÁGUA. Se já tiver navio (3), não faz nada
+            if (tabuleiro[linD2 + i][colD2 - i] == 0) {
+                tabuleiro[linD2 + i][colD2 - i] = 3;
             }
         }
     }
@@ -91,16 +127,16 @@ int main() {
         
         for (j = 0; j < 10; j++) {
             // Imprime o valor da célula (0 ou 3) seguido de um espaço
-            printf("%d ", tabuleiro[i][j]);
+            if(tabuleiro[i][j] == 0) {
+                printf(" 0 "); // Agua!
+            } else {
+                printf(" 3 "); // Navio!
+            }
         }
         printf("\n");
     }
 
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
 
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
