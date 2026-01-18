@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h> // Necessário para usar a função abs()
 
 // Desafio Batalha Naval - MateCheck
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
@@ -26,6 +27,123 @@ int main() {
         // O segundo 'for' passa por cada coluna daquela linha.
         for (j = 0; j < 10; j++) {
             tabuleiro[i][j] = 0; // 0 representa água
+        }
+    }
+
+    // Nível Mestre
+
+    // MATRIZES DE HABILIDADES
+
+    int matrizCone[5][5];
+    int matrizCruz[5][5];
+    int matrizOctaedro[5][5]; 
+
+    // O centro da matriz 5x5 é a posição (2, 2)
+    int centroMatriz = 2; 
+
+    // Habilidade Cone
+
+    // Lógica: Forma um triângulo apontando para cima
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            
+            // A coluna deve estar dentro da abertura do triângulo baseada na linha
+            if (i <= 2 && j >= (centroMatriz - i) && j <= (centroMatriz + i)) {
+                matrizCone[i][j] = 1;
+            } else {
+                matrizCone[i][j] = 0;
+            }
+        }
+    }
+
+    // Habilidade Cruz
+
+    // Lógica: Preenche se for a linha do meio ou a coluna do meio
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            if (i == centroMatriz || j == centroMatriz) {
+                matrizCruz[i][j] = 1;
+            } else {
+                matrizCruz[i][j] = 0;
+            }
+        }
+    }
+
+    // Habilidade Octaedro
+
+    // Lógica: Soma da distância horizontal + vertical <= raio
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            // abs() pega o valor absoluto (tira o sinal negativo)
+            if (abs(i - centroMatriz) + abs(j - centroMatriz) <= 2) {
+                matrizOctaedro[i][j] = 1;
+            } else {
+                matrizOctaedro[i][j] = 0;
+            }
+        }
+    }
+
+    // APLICANDO AS HABILIDADES NO TABULEIRO
+
+    // Variáveis para definir onde o centro da habilidade vai cair no tabuleiro grande
+    int origemX, origemY;
+    int tabuleiroX, tabuleiroY;
+
+    // Aplicar Cone
+    origemX = 1; // Linha 1 do tabuleiro
+    origemY = 2; // Coluna 2 do tabuleiro
+    
+    // Loop para percorrer a matriz da habilidade (5x5)
+    for(i = 0; i < 5; i++) {
+        for(j = 0; j < 5; j++) {
+            
+        
+            // Se i=0 e centroMatriz=2, o deslocamento é -2.
+            tabuleiroX = origemX + (i - centroMatriz);
+            tabuleiroY = origemY + (j - centroMatriz);
+
+            // VERIFICAÇÃO DE SEGURANÇA (Limites do Tabuleiro)
+            // Só aplicamos se a coordenada calculada existir no tabuleiro 10x10
+            if (tabuleiroX >= 0 && tabuleiroX < 10 && tabuleiroY >= 0 && tabuleiroY < 10) {
+                // Se na máscara for 1, aplicamos o efeito no tabuleiro
+                if (matrizCone[i][j] == 1) {
+                    tabuleiro[tabuleiroX][tabuleiroY] = 5;
+                }
+            }
+        }
+    }
+
+    // Aplicar Cruz no Centro
+    origemX = 5; // Linha 5
+    origemY = 5; // Coluna 5
+
+    for(i = 0; i < 5; i++) {
+        for(j = 0; j < 5; j++) {
+            tabuleiroX = origemX + (i - centroMatriz);
+            tabuleiroY = origemY + (j - centroMatriz);
+
+            if (tabuleiroX >= 0 && tabuleiroX < 10 && tabuleiroY >= 0 && tabuleiroY < 10) {
+                if (matrizCruz[i][j] == 1) {
+                    tabuleiro[tabuleiroX][tabuleiroY] = 5;
+                }
+            }
+        }
+    }
+
+    // Aplicar Octaedro
+    origemX = 8; // Linha 8
+    origemY = 8; // Coluna 8
+
+    for(i = 0; i < 5; i++) {
+        for(j = 0; j < 5; j++) {
+            tabuleiroX = origemX + (i - centroMatriz);
+            tabuleiroY = origemY + (j - centroMatriz);
+
+            if (tabuleiroX >= 0 && tabuleiroX < 10 && tabuleiroY >= 0 && tabuleiroY < 10) {
+                if (matrizOctaedro[i][j] == 1) {
+                    tabuleiro[tabuleiroX][tabuleiroY] = 5;
+                }
+            }
         }
     }
 
@@ -111,30 +229,42 @@ int main() {
     }
 
     // EXIBINDO O TABULEIRO
-
     printf("\n   --- BATALHA NAVAL ---\n\n");
 
     printf("    "); // Espaço inicial para alinhar
     for(j = 0; j < 10; j++){
-        printf("%d ", j); // Imprime o número da coluna
+        printf(" %d ", j); // Imprime o número da coluna
     }
     printf("\n");
 
-
     // Imprime o tabuleiro
     for (i = 0; i < 10; i++) {
-        printf("%d | ", i);
+        printf("%d | ", i); // Imprime o número da linha
         
         for (j = 0; j < 10; j++) {
-            // Imprime o valor da célula (0 ou 3) seguido de um espaço
-            if(tabuleiro[i][j] == 0) {
-                printf(" 0 "); // Agua!
-            } else {
-                printf(" 3 "); // Navio!
+            
+            // Exibição condicional
+            switch(tabuleiro[i][j]) {
+                case 0:
+                    printf(" 0 "); // Água
+                    break;
+                case 3:
+                    printf(" 3 "); // Navio Intacto
+                    break;
+                case 5:
+                    printf(" 5 "); // Área da Habilidade
+                    break;
+                default:
+                    printf(" 0 ");
             }
         }
         printf("\n");
-    }
+    } 
+
+    printf("\nLegenda: 0 = Agua, 3 = Navio, 5 = Habilidade Especial\n");
+
+    return 0;
+
 
 
 
@@ -158,6 +288,6 @@ int main() {
     // 0 0 1 0 0
     // 1 1 1 1 1
     // 0 0 1 0 0
+} 
 
-    return 0;
-}
+
